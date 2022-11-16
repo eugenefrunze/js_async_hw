@@ -2,7 +2,6 @@
 // add error handling for fetch (based on statuses, ok property)
 
 fetch('https://jsonplaceholder.typicode.com/post')
-// fetch('https://dummyjson.com/products/1')
   .then(res => {
     if(!res.ok) throw new Error(`Error fetching, status is ${res.status}`)
     return res.json();
