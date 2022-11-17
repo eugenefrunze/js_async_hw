@@ -26,20 +26,22 @@ const promisify = (functionAsCallback, ...argsToFunction) => {
                     return resolve(result)
                 }
             }
-            argsToFunction.push(callback)
+            argsToFunction.unshift(callback)
             functionAsCallback.call(this, ...argsToFunction)
         })
     }
 }
 
-const someAsyncFunction = (num1, num2, callback) => {
-    if (!num1 || !num2) {
-        return callback(new Error('truobles with arguments'), null)
+const someAsyncFunction = (callback, ...args) => {
+    if(args.length === 0){
+        callback(new Error('gimme some args'), null)
+    } else {
+        args.length === 1 ? callback(null, args[0]) : callback(null, args.reduce((sum, el) => sum + el))
     }
-    return callback(null, num1 + num2)
 }
 
-const promisifiedFunction = promisify(someAsyncFunction)
+const promisifiedFunction = promisify(someAsyncFunction, 50)
 
-
-promisifiedFunction(6, 2).then(result => console.log(result))
+promisifiedFunction(2, 7)
+    .then(res => console.log(res))
+    .catch(error => console.error(error.message))
